@@ -1,0 +1,60 @@
+version: '3.2'
+
+services:
+  vault:
+    container_name: vallheru_vault
+    image: vault:1.1.0
+    privileged: true
+    volumes:
+      - ./vault/config.hcl:/vault/config/config.hcl
+      - ./wait-for.sh:/wait-for-it.sh
+    command:
+      - "/wait-for-it.sh"
+      - "mysql:3306"
+      - "--timeout=15"
+      - "--"
+      - "vault"
+      - "server"
+      - "-config=/vault/config/config.hcl"
+    networks:
+      apps_network:
+        aliases:
+          - vault
+        ipv4_address: 172.16.222.11
+
+
+  mysql:
+    container_name: vallheru_mysql
+    image: mysql:8
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
+    volumes:
+      - ./mysql/data:/var/lib/mysql
+    env_file:
+      - ./assets/secrets.env
+    networks:
+      apps_network:
+        aliases:
+          - mysql
+        ipv4_address: 172.16.222.10
+
+
+  adminer:
+    image: adminer
+    restart: always
+    environment:
+      ADMINER_DEFAULT_SERVER: mysql
+    networks:
+      apps_network:
+        aliases:
+          - adminer
+        ipv4_address: 172.16.222.9
+
+
+networks:
+  apps_network:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.16.222.0/24
