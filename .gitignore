@@ -1,3 +1,4 @@
 /vault/config.hcl
 /secrets.env
 /mysql/data/
+/assets/secrets.env
