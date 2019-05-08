@@ -30,6 +30,7 @@ services:
     restart: always
     volumes:
       - ./mysql/data:/var/lib/mysql
+      - ./mysql/conf.d/custom.conf:/etc/mysql/conf.d/z-custom.conf
     env_file:
       - ./assets/secrets.env
     networks:
@@ -44,11 +45,40 @@ services:
     restart: always
     environment:
       ADMINER_DEFAULT_SERVER: mysql
+    ports:
+      - "8180:8080"
     networks:
       apps_network:
         aliases:
           - adminer
         ipv4_address: 172.16.222.9
+
+
+  nextcloud:
+    image: nextcloud
+    restart: always
+    environment:
+      UTF8MB4_ENABLED: 0
+      MYSQL_DATABASE: nextcloud
+      MYSQL_USER: root
+      MYSQL_HOST: mysql
+      NEXTCLOUD_TABLE_PREFIX: nc_
+    ports:
+      - "8181:80"
+    env_file:
+      - ./assets/secrets.env
+    volumes:
+      - ./nextcloud/nextcloud:/var/www/html
+      - ./nextcloud/apps:/var/www/html/custom_apps
+      - ./nextcloud/config:/var/www/html/config
+      - ./nextcloud/data:/var/www/html/data
+    depends_on:
+      - mysql
+    networks:
+      apps_network:
+        aliases:
+          - nextcloud
+        ipv4_address: 172.16.222.12
 
 
 networks:
