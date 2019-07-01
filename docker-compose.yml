@@ -57,6 +57,8 @@ services:
   nextcloud:
     image: nextcloud
     restart: always
+    labels:
+      app.name: "vallheru_nextcloud"
     environment:
       UTF8MB4_ENABLED: 0
       MYSQL_DATABASE: nextcloud

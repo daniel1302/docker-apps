@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+
+# Find dontainer ID by tag
+CONTAINER_ID=`docker ps --filter "label=app.name=vallheru_nextcloud" --format "{{.ID}}" | head -n1`
+
+if [ "$CONTAINER_ID" == "" ]; then
+    echo "Vallheru nextcloud not started";
+    exit 1;
+fi;
+
+
+docker exec -uwww-data $CONTAINER_ID php occ $@
