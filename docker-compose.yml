@@ -1,6 +1,18 @@
 version: '3.2'
 
 services:
+  thelongue:
+    container_name: vallheru_thelongue
+    image: thelounge/lounge:latest
+    volumes: 
+      - ./thelongue:/home/lounge/data
+    privileged: true
+    networks:
+       apps_network:
+         aliases:
+           - thelongue
+         ipv4_address: 172.16.222.13
+
   vault:
     container_name: vallheru_vault
     image: vault:1.1.0

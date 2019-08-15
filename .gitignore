@@ -2,4 +2,5 @@
 /secrets.env
 /mysql/data/
 /assets/secrets.env
-/nextcloud/*
+/nextcloud
+/thelongue
