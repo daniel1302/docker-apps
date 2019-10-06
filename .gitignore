@@ -4,3 +4,7 @@
 /assets/secrets.env
 /nextcloud
 /thelongue
+/blog_src
+
+.env
+*.swp
