@@ -7,11 +7,13 @@ services:
             context: ./
             dockerfile: ./blog/Dockerfile
             args:
-                HUGO_BASE_URL: ${BLOG_BASE_URL}
+                BLOG_BASE_URL: ${BLOG_BASE_URL}
+                BLOG_PORT: ${BLOG_INTERNAL_PORT}
         ports:
-             - "8383:1313"
+             - "8383:${BLOG_INTERNAL_PORT}"
         environment:
-            HUGO_BASE_URL: ${BLOG_URL}
+            HUGO_BASE_URL: ${BLOG_BASE_URL}
+            HUGO_PORT: ${BLOG_INTERNAL_PORT}
             HUGO_PAGE_NAME: ${BLOG_NAME}
         volumes:
             - ./blog_src:/app/blog
@@ -114,6 +116,7 @@ services:
             MYSQL_DATABASE: nextcloud
             MYSQL_USER: root
             MYSQL_HOST: mysql
+            MYSQL_PASSWORd: ${MYSQL_ROOT_PASSWORD}
             NEXTCLOUD_TABLE_PREFIX: nc_
             NEXT_CLOUD_ADMIN_USER: ${NEXTCLOUD_ADMIN_USER}
             NEXT_CLOUD_ADMIN_PASSWORD: ${NEXTCLOUD_ADMIN_PASSWORD}
